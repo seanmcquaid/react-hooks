@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -26,6 +26,10 @@ const Ingredients = () => {
   useEffect(() => {
     console.log('RENDERING INGREDIENTS', userIngredients);
   }, [userIngredients]);
+
+  const filteredIngredientsHandler = useCallback(filteredIngredients => {
+    setUserIngredients(filteredIngredients);
+  }, []);
 
   const addIngredientHandler = ingredient => {
     fetch('https://react-hooks-update.firebaseio.com/ingredients.json', {
@@ -55,7 +59,7 @@ const Ingredients = () => {
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onLoadIngredients={filteredIngredientsHandler} />
         <IngredientList
           ingredients={userIngredients}
           onRemoveItem={removeIngredientHandler}
